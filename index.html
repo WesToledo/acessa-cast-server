@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload</title>
+  </head>
+  <body>
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      action="http://localhost:3333/api/upload/podcast"
+    >
+      <br />
+      <input type="text" name="name" />
+      <br /><input type="text" name="description" /> <br /><input
+        type="text"
+        name="author"
+        value="60ac07cdc5aef24ddf9bbd6b"
+      />
+      <input type="text" name="album" value="60ac1cdf25689c7eb2f5077d" />
+      <br />
+      <input type="file" name="audio" />
+      <br />
+      <input type="file" name="thumb" />
+
+      <br />
+      <input type="submit" value="upload" />
+    </form>
+  </body>
+</html>
