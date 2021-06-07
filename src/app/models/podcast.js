@@ -1,7 +1,7 @@
 const mongoose = require("../../database");
 
 const PodcastSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
@@ -23,7 +23,7 @@ const PodcastSchema = new mongoose.Schema({
     ref: "User",
     require: true,
   },
-  audio_source: {
+  uri: {
     type: String,
     require: true,
   },

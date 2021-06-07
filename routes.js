@@ -38,10 +38,7 @@ const uploadRouter = express.Router();
 
 uploadRouter.post(
   "/podcast",
-  uploadMiddleware.fields([
-    { name: "thumb", maxCount: 1 },
-    { name: "audio", maxCount: 1 },
-  ]),
+  uploadMiddleware.fields([{ name: "thumb", maxCount: 1 }, ,]),
   podcast.upload
 );
 

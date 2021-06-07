@@ -16,6 +16,7 @@ async function login(req, res) {
       .select("password")
       .select("name")
       .select("type")
+      .select("email")
       .lean();
 
     if (!user)

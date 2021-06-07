@@ -3,13 +3,13 @@ const AlbumSchema = require("../models/album");
 async function upload(req, res) {
   try {
     const { path: pathThumb } = req.files["thumb"][0];
-    const { name, description, author } = req.body;
+    const { title, description, author } = req.body;
 
     const album = await AlbumSchema.create({
-      name,
+      title,
       description,
       author,
-      path: pathThumb,
+      image_source: pathThumb,
     });
 
     return res.send({ album: album });
@@ -22,7 +22,7 @@ async function upload(req, res) {
 
 async function list(req, res) {
   try {
-    const albums = await AlbumSchema.find().populate("podcasts");
+    const albums = await AlbumSchema.find().populate("podcasts author");
     return res.send({ albums });
   } catch (err) {
     console.log(err);

@@ -1,7 +1,7 @@
 const mongoose = require("../../database");
 
 const AlbumSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
