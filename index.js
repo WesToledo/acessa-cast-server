@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -9,22 +11,21 @@ const {
   userRouter,
   uploadRouter,
   albumRouter,
+  tagRouter,
+  areaRouter,
 } = require("./routes");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(
-  "/ftp/public",
-  express.static("public"),
-  serveIndex("public", { icons: true })
-);
 
 // Routers
 app.use("/api", rootRouter);
 app.use("/api/user", userRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/album", albumRouter);
+app.use("/api/tag", tagRouter);
+app.use("/api/area", areaRouter);
 
 app.listen(process.env.PORT || 3333);

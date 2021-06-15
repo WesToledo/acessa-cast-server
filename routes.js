@@ -1,6 +1,7 @@
 const express = require("express");
-var multer = require("multer");
+const multer = require("multer");
 const path = require("path");
+const multerConfig = require("./src/app/config/multer");
 
 const authMiddleware = require("./src/app/middleware/auth");
 
@@ -8,17 +9,19 @@ const user = require("./src/app/controllers/user.controller");
 const auth = require("./src/app/controllers/authorization.controller");
 const podcast = require("./src/app/controllers/podcast.controller");
 const album = require("./src/app/controllers/album.controller");
+const tag = require("./src/app/controllers/tag.controller");
+const knowledgeArea = require("./src/app/controllers/knowledgeArea.controller");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname + Date.now() + path.extname(file.originalname));
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/uploads/");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname + Date.now() + path.extname(file.originalname));
+//   },
+// });
 
-const uploadMiddleware = multer({ storage });
+const uploadMiddleware = multer(multerConfig);
 
 //Auth
 const rootRouter = express.Router();
@@ -26,7 +29,7 @@ rootRouter.post("/login", auth.login);
 
 // Users
 const userRouter = express.Router();
-userRouter.use(authMiddleware);
+// userRouter.use(authMiddleware);
 userRouter.post("/create", user.create);
 userRouter.get("/", user.list);
 userRouter.get("/:id", user.index);
@@ -38,7 +41,10 @@ const uploadRouter = express.Router();
 
 uploadRouter.post(
   "/podcast",
-  uploadMiddleware.fields([{ name: "thumb", maxCount: 1 }, ,]),
+  uploadMiddleware.fields([
+    { name: "thumb", maxCount: 1 },
+    { name: "audio", maxCount: 1 },
+  ]),
   podcast.upload
 );
 
@@ -51,10 +57,25 @@ uploadRouter.post(
 // Albuns
 const albumRouter = express.Router();
 albumRouter.get("/", album.list);
+albumRouter.get("/:id", album.index);
+albumRouter.put("/update/:id", album.update);
+albumRouter.put("/publish/:id", album.publish);
+
+// tag
+const tagRouter = express.Router();
+tagRouter.post("/create", tag.create);
+tagRouter.get("/", tag.list);
+
+// area
+const areaRouter = express.Router();
+areaRouter.post("/create", knowledgeArea.create);
+areaRouter.get("/", knowledgeArea.list);
 
 module.exports = {
   rootRouter,
   userRouter,
   uploadRouter,
   albumRouter,
+  tagRouter,
+  areaRouter,
 };

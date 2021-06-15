@@ -1,4 +1,7 @@
 const mongoose = require("../../database");
+const aws = require("aws-sdk");
+
+const s3 = new aws.S3({});
 
 const PodcastSchema = new mongoose.Schema({
   title: {
@@ -14,16 +17,20 @@ const PodcastSchema = new mongoose.Schema({
     require: true,
     default: "Episode",
   },
-  date: {
-    type: Date,
-    require: true,
-  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     require: true,
   },
-  uri: {
+  audio_key: {
+    type: String,
+    require: true,
+  },
+  image_key: {
+    type: String,
+    require: true,
+  },
+  audio_source: {
     type: String,
     require: true,
   },
@@ -31,6 +38,31 @@ const PodcastSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  createAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  publish: {
+    type: Boolean,
+    default: false,
+  },
+  tag: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tag",
+    },
+  ],
+});
+
+PodcastSchema.pre("remove", function () {
+  return s3
+    .deleteObjects({
+      Bucket: "acessa-cast-storage",
+      Delete: {
+        Objects: [{ Key: this.audio_key }, { Key: this.image_key }],
+      },
+    })
+    .promise();
 });
 
 const Podcast = mongoose.model("Podcast", PodcastSchema);
