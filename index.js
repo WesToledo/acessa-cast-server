@@ -13,6 +13,8 @@ const {
   albumRouter,
   tagRouter,
   areaRouter,
+  podcastRouter,
+  searchRouter,
 } = require("./routes");
 
 const app = express();
@@ -25,7 +27,9 @@ app.use("/api", rootRouter);
 app.use("/api/user", userRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/album", albumRouter);
+app.use("/ap/podcast", podcastRouter);
 app.use("/api/tag", tagRouter);
 app.use("/api/area", areaRouter);
+app.use("/api/search", searchRouter);
 
 app.listen(process.env.PORT || 3333);

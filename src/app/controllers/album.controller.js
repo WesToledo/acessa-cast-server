@@ -1,4 +1,5 @@
 const AlbumSchema = require("../models/album");
+const PodcastSchema = require("../models/podcast");
 
 async function upload(req, res) {
   try {
@@ -27,7 +28,9 @@ async function upload(req, res) {
 
 async function list(req, res) {
   try {
-    const albums = await AlbumSchema.find().populate("podcasts author");
+    const albums = await AlbumSchema.find({ publish: true }).populate(
+      "podcasts author tags"
+    );
     return res.send({ albums });
   } catch (err) {
     console.log(err);
@@ -38,8 +41,16 @@ async function list(req, res) {
 }
 
 async function index(req, res) {
+  console.log(req.params.id);
   try {
-    const album = await AlbumSchema.findById(req.params.id);
+    const album = await AlbumSchema.find({ _id: req.params.id }).populate({
+      path: "podcasts",
+      model: "Podcast",
+      populate: {
+        path: "tag",
+        model: "Tag",
+      },
+    });
     return res.send({ album });
   } catch (err) {
     console.log(err);
@@ -76,4 +87,19 @@ async function publish(req, res) {
   }
 }
 
-module.exports = { upload, list, index, update, publish };
+async function listMy(req, res) {
+  console.log(req.params.id);
+  try {
+    const albums = await AlbumSchema.find({ author: req.params.id }).populate(
+      "podcasts author"
+    );
+    return res.send({ albums });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(400)
+      .send({ error: "Erro ao buscar albuns", message: err });
+  }
+}
+
+module.exports = { upload, list, index, update, publish, listMy };

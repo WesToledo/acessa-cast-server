@@ -11,6 +11,7 @@ const podcast = require("./src/app/controllers/podcast.controller");
 const album = require("./src/app/controllers/album.controller");
 const tag = require("./src/app/controllers/tag.controller");
 const knowledgeArea = require("./src/app/controllers/knowledgeArea.controller");
+const search = require("./src/app/controllers/search.controller");
 
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -54,12 +55,29 @@ uploadRouter.post(
   album.upload
 );
 
+uploadRouter.put(
+  "/podcast/update",
+  uploadMiddleware.fields([
+    { name: "thumb", maxCount: 1 },
+    { name: "audio", maxCount: 1 },
+  ]),
+  podcast.update
+);
+
 // Albuns
 const albumRouter = express.Router();
 albumRouter.get("/", album.list);
+albumRouter.get("/my/:id", album.listMy);
 albumRouter.get("/:id", album.index);
 albumRouter.put("/update/:id", album.update);
 albumRouter.put("/publish/:id", album.publish);
+
+//Podcasts
+const podcastRouter = express.Router();
+podcastRouter.put("/publish/:id", podcast.publish);
+
+const searchRouter = express.Router();
+searchRouter.post("/", search.searchPodcast);
 
 // tag
 const tagRouter = express.Router();
@@ -76,6 +94,8 @@ module.exports = {
   userRouter,
   uploadRouter,
   albumRouter,
+  podcastRouter,
   tagRouter,
   areaRouter,
+  searchRouter,
 };
