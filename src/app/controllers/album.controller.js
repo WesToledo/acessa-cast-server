@@ -102,4 +102,24 @@ async function listMy(req, res) {
   }
 }
 
-module.exports = { upload, list, index, update, publish, listMy };
+async function remove(req, res) {
+  try {
+    const album = await AlbumSchema.findOne({ _id: req.params.id });
+
+    const podcastsIds = album.podcasts.map(({ _id }) => _id);
+
+    await album.remove({
+      _id: {
+        $in: podcastsIds,
+      },
+    });
+
+    await PodcastSchema.deleteOne({ _id: req.params.idPodcast });
+
+    res.send();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+module.exports = { upload, list, index, update, publish, listMy, remove };

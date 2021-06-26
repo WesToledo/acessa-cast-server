@@ -4,8 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const serveIndex = require("serve-index");
-
 const {
   rootRouter,
   userRouter,
@@ -27,7 +25,7 @@ app.use("/api", rootRouter);
 app.use("/api/user", userRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/album", albumRouter);
-app.use("/ap/podcast", podcastRouter);
+app.use("/api/podcast", podcastRouter);
 app.use("/api/tag", tagRouter);
 app.use("/api/area", areaRouter);
 app.use("/api/search", searchRouter);

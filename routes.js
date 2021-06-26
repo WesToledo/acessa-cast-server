@@ -71,10 +71,12 @@ albumRouter.get("/my/:id", album.listMy);
 albumRouter.get("/:id", album.index);
 albumRouter.put("/update/:id", album.update);
 albumRouter.put("/publish/:id", album.publish);
+albumRouter.delete("/remove/:id", album.remove);
 
 //Podcasts
 const podcastRouter = express.Router();
 podcastRouter.put("/publish/:id", podcast.publish);
+podcastRouter.delete("/remove/:idPodcast/:idAlbum", podcast.remove);
 
 const searchRouter = express.Router();
 searchRouter.post("/", search.searchPodcast);

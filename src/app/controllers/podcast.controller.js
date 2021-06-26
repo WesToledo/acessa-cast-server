@@ -112,4 +112,17 @@ async function update(req, res) {
   }
 }
 
-module.exports = { upload, publish, update };
+async function remove(req, res) {
+  try {
+    await AlbumSchema.updateOne(
+      { _id: req.params.idAlbum },
+      { $pullAll: { uid: [req.params.idPodcast] } }
+    );
+
+    await PodcastSchema.deleteOne({ _id: req.params.idPodcast });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+module.exports = { upload, publish, update, remove };
